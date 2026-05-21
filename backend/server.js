@@ -1,3 +1,5 @@
+require('dotenv').config(); 
+
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -10,9 +12,9 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Connect to local MongoDB instance
-mongoose.connect('mongodb://localhost:27017/ioehub')
-  .then(() => console.log('MongoDB Connected Successfully'))
+// 2. Use the environment variable for your Atlas connection
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('🚀 Connected smoothly to MongoDB Atlas Cloud!'))
   .catch(err => console.error('Database connection error:', err));
 
 // ROUTE 1: Get all subjects grouped by Year for the homepage dashboard

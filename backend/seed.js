@@ -1,12 +1,8 @@
 const mongoose = require('mongoose');
 const Subject = require('./models/Subject');
+require('dotenv').config(); // Loads environment variables from your .env file
 
-// 1. Connect to your database
-mongoose.connect('mongodb://localhost:27017/ioehub')
-  .then(() => console.log('Seed connection active...'))
-  .catch(err => console.error('Seed connection error:', err));
-
-// 2. The full subject data matrix extracted from your App.jsx
+// The full subject data matrix extracted from your App.jsx
 const DATA = {
   "First year": [
     {
@@ -98,9 +94,8 @@ const DATA = {
 
 async function seedDatabase() {
   try {
-    // Clean out existing data to prevent duplications
-    await Subject.deleteMany({});
     console.log('Cleared old subject collection rows.');
+    await Subject.deleteMany({});
 
     const subjectsToInsert = [];
 
@@ -122,6 +117,7 @@ async function seedDatabase() {
     await Subject.insertMany(subjectsToInsert);
     console.log(`Successfully migrated ${subjectsToInsert.length} subjects into MongoDB!`);
     
+    mongoose.connection.close();
     process.exit(0);
   } catch (error) {
     console.error("Migration failed:", error);
@@ -129,4 +125,17 @@ async function seedDatabase() {
   }
 }
 
-seedDatabase();
+// Connect explicitly using your cloud MONGO_URI from the .env file
+// Connect explicitly using your cloud MONGO_URI
+mongoose.connect(process.env.MONGO_URI, {
+  serverSelectionTimeoutMS: 20000, // Increase timeout to give it more time
+  tlsAllowInvalidCertificates: true // This bypasses the certificate handshake issue
+})
+  .then(() => {
+    console.log('🚀 Connected smoothly to MongoDB Atlas Cloud!');
+    seedDatabase();
+  })
+  .catch(err => {
+    console.error('Seed connection error:', err);
+    console.log('Troubleshooting Tip: Ensure your password in .env contains no special characters other than alphanumeric!');
+  });
