@@ -8,12 +8,12 @@ from .serializers import PatientSerializer
 
 @api_view(['GET'])
 def api_root(request):
-	return Response({
-		'message': 'Hospital Management System API',
-		'patients': '/api/patients/',
-	})
+    return Response({
+        'message': 'Hospital Management System API',
+        'patients': '/api/patients/',
+    })
 
 
 class PatientViewSet(viewsets.ModelViewSet):
-	queryset = Patient.objects.all().order_by('-patient_id')
-	serializer_class = PatientSerializer
+    queryset = Patient.objects.all().order_by('-patient_id')
+    serializer_class = PatientSerializer
