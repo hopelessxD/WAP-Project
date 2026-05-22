@@ -1,29 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import SemesterSection from './components/SemesterSection';
-import ResourceModal from './components/ResourceModal';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import SemesterSection from "./components/SemesterSection";
+import ResourceModal from "./components/ResourceModal";
+import PatientForm from "./components/PatientForm";
+import "./App.css";
 
 function App() {
   const [data, setData] = useState(null);
   const [search, setSearch] = useState("");
   const [selectedSubject, setSelectedSubject] = useState(null);
+  const [patients, setPatients] = useState([]);
+  const [showCreate, setShowCreate] = useState(false);
+
+  const fetchPatients = () => {
+    fetch("http://localhost:5000/api/patients/")
+      .then((res) => res.json())
+      .then((json) => {
+        const list = Array.isArray(json) ? json : json.results || [];
+        setPatients(list);
+        const subjects = list.map((p) => ({
+          code: p.patient_id,
+          name: p.full_name || p.name || `Patient ${p.patient_id}`,
+        }));
+        const transformed = {
+          Patients: [{ key: "patients", label: "Patients", subjects }],
+        };
+        setData(transformed);
+      })
+      .catch((err) => console.error("Error fetching data:", err));
+  };
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/subjects')
-      .then(res => res.json())
-      .then(json => {
-        console.log("Data received from MongoDB:", json);
-        setData(json);
-      })
-      .catch(err => console.error("Error fetching data:", err));
+    fetchPatients();
   }, []);
 
   if (!data) return <div>Loading...</div>;
 
   return (
     <div className="hub">
+      <div style={{ padding: 12 }}>
+        <button onClick={() => setShowCreate(true)}>Add Patient</button>
+        <span style={{ marginLeft: 12 }}>{patients.length} patients</span>
+      </div>
       {/* ... keep your header and search logic here ... */}
-      
+
       <main className="dashboard-layout">
         {Object.entries(data).map(([yearName, semesters]) => (
           <div key={yearName}>
@@ -45,6 +64,15 @@ function App() {
         <ResourceModal
           subject={selectedSubject}
           onClose={() => setSelectedSubject(null)}
+        />
+      )}
+
+      {showCreate && (
+        <PatientForm
+          onCreate={() => {
+            fetchPatients();
+          }}
+          onClose={() => setShowCreate(false)}
         />
       )}
     </div>
