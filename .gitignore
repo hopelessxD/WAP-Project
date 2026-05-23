@@ -1,13 +1,39 @@
+# --- Python / Django ---
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Database
+db.sqlite3
+db.sqlite3-journal
+
+# Django specific
+media/
+*.log
+
+# --- Node / React ---
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-test.log*
+
 # Dependency directories
 node_modules/
-
-# Environment files
-.env
-.env.local
-
-# Build folders
 dist/
 build/
 
-# Logs
-npm-debug.log*
+# VS Code / OS files
+.vscode/
+.DS_Store
+Thumbs.db
