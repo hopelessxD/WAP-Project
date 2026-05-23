@@ -2,7 +2,8 @@ import React from 'react';
 import { usePatients } from '../hooks/usePatients';
 
 const PatientTable = () => {
-    const { patients, loading } = usePatients();
+    // Make sure to pull deletePatient out of the hook here
+    const { patients, loading, deletePatient } = usePatients();
 
     if (loading) return <p>Loading records...</p>;
 
@@ -16,6 +17,7 @@ const PatientTable = () => {
                     <th>Blood Group</th>
                     <th>BMI</th>
                     <th>Status</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,6 +29,14 @@ const PatientTable = () => {
                         <td>{p.blood_group}</td>
                         <td>{p.bmi}</td>
                         <td>{p.status}</td>
+                        <td>
+                            <button 
+                                onClick={() => deletePatient(p.patient_id)}
+                                style={{ color: 'red' }}
+                            >
+                                Delete
+                            </button>
+                        </td>
                     </tr>
                 ))}
             </tbody>

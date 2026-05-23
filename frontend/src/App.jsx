@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import PatientTable from './components/PatientTable';
-import DoctorList from './pages/DoctorList'; // 1. Import your component
+// 1. Import your Patients page component
+import Patients from './pages/Patients'; 
+import DoctorList from './pages/DoctorList';
 import Schedule from './pages/Schedule';
 
 function App() {
@@ -19,7 +20,8 @@ function App() {
 
         <main style={{ padding: '20px', flexGrow: 1 }}>
           <Routes>
-            <Route path="/patients" element={<PatientTable />} />
+            {/* 2. Point to the Patients PAGE, not the component */}
+            <Route path="/patients" element={<Patients />} /> 
             <Route path="/doctors" element={<DoctorList />} /> 
             <Route path="/schedule" element={<Schedule />} />
           </Routes>

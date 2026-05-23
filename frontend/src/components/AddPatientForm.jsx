@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import api from '../api/axiosConfig';
+import api from '../api/client';
 
 const AddPatientForm = ({ onPatientAdded }) => {
     const [formData, setFormData] = useState({
