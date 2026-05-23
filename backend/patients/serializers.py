@@ -19,11 +19,9 @@ class DoctorSerializer(serializers.ModelSerializer):
 
 # backend/serializers.py
 class AppointmentSerializer(serializers.ModelSerializer):
-    # Map the model fields to the names you want to use in the API
     patient_name = serializers.CharField(source='patient.full_name', read_only=True)
     doctor_name = serializers.CharField(source='doctor.full_name', read_only=True)
 
     class Meta:
         model = Appointment
-        # Use the actual field names from your model here
-        fields = ['id', 'day', 'start_time', 'patient_name', 'doctor_name']
+        fields = ['id', 'doctor', 'patient', 'day', 'start_time', 'patient_name', 'doctor_name']
